@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MakeThisObjectFly : MonoBehaviour {
-    public float rotateBy = 15.0f;
+    public float pitchAngleRot = 10.0f;
+    public float rollAngleRot = 5.0f;
+    public float yawAngleRot = 2.5f;
+    public float velocityBeforePlaneCanPitchRoll = 30.0f;
+    public float maxVelocity = 400.0f;
 
-    const float THRUST_POWER = 0.5f;
-    const float DECCELERATION_POWER = 0.15f;
-    public float planeSpeed = 0.0f;
+    const float THRUST_POWER = 0.75f;
+    const float DECCELERATION_POWER = 0.98f;
+    public float planeVelocity = 0.0f;
 
     // Use this for initialization
     void Start () {
@@ -15,46 +19,46 @@ public class MakeThisObjectFly : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-        //next two lines move plane forward and back 
-        //if (Input.GetKey(KeyCode.W))
-        //{
-        //    gameObject.transform.position += transform.forward * (movementSpeed * Time.deltaTime); 
-        //}
-        //if (Input.GetKey(KeyCode.S))
-        //{
-        //    gameObject.transform.position += transform.forward * (-1 * movementSpeed * Time.deltaTime);
-        //}
-        if (Input.GetKey(KeyCode.W))
+	void FixedUpdate () {
+        
+        if (Input.GetKey(KeyCode.W) && planeVelocity <= maxVelocity)
         {
-            planeSpeed += THRUST_POWER;
+            planeVelocity += THRUST_POWER;
         }
-        if (Input.GetKey(KeyCode.S))
+        else if (Input.GetKey(KeyCode.S) && planeVelocity > 0)
         {
-            if (planeSpeed > 0)
+            planeVelocity *= DECCELERATION_POWER;        
+        }
+        if (Input.GetKey(KeyCode.A) && planeVelocity > 8)
+        {
+            gameObject.transform.Rotate(Vector3.up, (-1 * yawAngleRot * Time.deltaTime));
+        }
+        else if (Input.GetKey(KeyCode.D) && planeVelocity > 8)
+        {
+            gameObject.transform.Rotate(Vector3.up, (yawAngleRot * Time.deltaTime));
+        }
+
+
+        if (planeVelocity > velocityBeforePlaneCanPitchRoll)
+        {
+            if (Input.GetKey(KeyCode.I))
             {
-                planeSpeed -= DECCELERATION_POWER;
-            }          
+                gameObject.transform.Rotate(Vector3.right, (pitchAngleRot * Time.deltaTime));
+            }
+            if (Input.GetKey(KeyCode.K))
+            {
+                gameObject.transform.Rotate(Vector3.right, (-1 * pitchAngleRot * Time.deltaTime));
+            }
+            if (Input.GetKey(KeyCode.J))
+            {
+                gameObject.transform.Rotate(Vector3.forward, (rollAngleRot * Time.deltaTime));
+            }
+            if (Input.GetKey(KeyCode.L))
+            {
+                gameObject.transform.Rotate(Vector3.forward, (-1 * rollAngleRot * Time.deltaTime));
+            }
         }
 
-        if (Input.GetKey(KeyCode.I))
-        {
-            gameObject.transform.Rotate(Vector3.right, (rotateBy * Time.deltaTime));
-        }
-        if (Input.GetKey(KeyCode.K))
-        {
-            gameObject.transform.Rotate(Vector3.right, (-1 * rotateBy * Time.deltaTime));
-        }
-        if (Input.GetKey(KeyCode.J))
-        {
-            gameObject.transform.Rotate(Vector3.forward, (rotateBy * Time.deltaTime));
-        }
-        if (Input.GetKey(KeyCode.L))
-        {
-            gameObject.transform.Rotate(Vector3.forward, (-1 * rotateBy * Time.deltaTime));
-        }
-        Debug.Log(gameObject.transform.rotation);
-
-        gameObject.transform.position += transform.forward * (planeSpeed * Time.deltaTime);
+        gameObject.transform.position += transform.forward * (planeVelocity * Time.deltaTime);
     }
 }
