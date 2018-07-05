@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MakeThisObjectFly : MonoBehaviour {
-    public float pitchAngleRot = 10.0f;
-    public float rollAngleRot = 5.0f;
     public float yawAngleRot = 2.5f;
     public float velocityBeforePlaneCanPitchRoll = 30.0f;
     public float maxVelocity = 400.0f;
+    public float minVelocity = 25.0f;
 
     const float THRUST_POWER = 0.75f;
     const float DECCELERATION_POWER = 0.98f;
+    const float GRAVITY = 10.0f;
     public float planeVelocity = 0.0f;
+    bool isObjectFlying = false;
+    bool hasObjectStalled = false;
 
     // Use this for initialization
     void Start () {
@@ -19,7 +21,7 @@ public class MakeThisObjectFly : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void FixedUpdate () {
+	void Update () {
         
         if (Input.GetKey(KeyCode.W) && planeVelocity <= maxVelocity)
         {
@@ -38,27 +40,27 @@ public class MakeThisObjectFly : MonoBehaviour {
             gameObject.transform.Rotate(Vector3.up, (yawAngleRot * Time.deltaTime));
         }
 
-
-        if (planeVelocity > velocityBeforePlaneCanPitchRoll)
+        if (planeVelocity >= velocityBeforePlaneCanPitchRoll)
         {
-            if (Input.GetKey(KeyCode.I))
+            gameObject.transform.Rotate(Input.GetAxis("Pitch"), 0.0f, -Input.GetAxis("Roll"));
+            if(!isObjectFlying)
             {
-                gameObject.transform.Rotate(Vector3.right, (pitchAngleRot * Time.deltaTime));
-            }
-            if (Input.GetKey(KeyCode.K))
-            {
-                gameObject.transform.Rotate(Vector3.right, (-1 * pitchAngleRot * Time.deltaTime));
-            }
-            if (Input.GetKey(KeyCode.J))
-            {
-                gameObject.transform.Rotate(Vector3.forward, (rollAngleRot * Time.deltaTime));
-            }
-            if (Input.GetKey(KeyCode.L))
-            {
-                gameObject.transform.Rotate(Vector3.forward, (-1 * rollAngleRot * Time.deltaTime));
+                isObjectFlying = true;
             }
         }
 
+        planeVelocity -= transform.forward.y * Time.deltaTime * GRAVITY;
+
+        if (isObjectFlying && planeVelocity < velocityBeforePlaneCanPitchRoll)
+        {
+            planeVelocity = minVelocity;
+            hasObjectStalled = true;
+        }
+
+        //if (hasObjectStalled)
+        //{
+
+        //}
         gameObject.transform.position += transform.forward * (planeVelocity * Time.deltaTime);
     }
 }
