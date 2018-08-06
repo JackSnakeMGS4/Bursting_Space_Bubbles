@@ -7,7 +7,6 @@ public class ChaseCameraForPlayer : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        Debug.Log("ChaseCameraForPlayer script reached!");
 	}
 	
 	// Update is called once per frame

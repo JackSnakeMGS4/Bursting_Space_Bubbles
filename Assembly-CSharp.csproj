@@ -63,6 +63,7 @@
     <Compile Include="Assets\Scripts\Gameplay\MakeThisObjectFly.cs" />
     <Compile Include="Assets\Scripts\Gameplay\RandomizeColor.cs" />
     <Compile Include="Assets\Scripts\General\ChaseCameraForPlayer.cs" />
+    <Compile Include="Assets\Scripts\General\CheckForBubbleHits.cs" />
     <Compile Include="Assets\Scripts\General\CheckForCollisionWithTerrain.cs" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>C:/Unity/Projects/WIP/Bursting_Space_Bubbles/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>

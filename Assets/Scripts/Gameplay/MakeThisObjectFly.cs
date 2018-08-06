@@ -13,11 +13,10 @@ public class MakeThisObjectFly : MonoBehaviour {
     const float GRAVITY = 10.0f;
     public float planeVelocity = 0.0f;
     bool isObjectFlying = false;
-    bool hasObjectStalled = false;
+    //bool hasObjectStalled = false;
 
     // Use this for initialization
     void Start () {
-        Debug.Log("MakeThisObjectFly script reached!");
 	}
 	
 	// Update is called once per frame
@@ -54,7 +53,7 @@ public class MakeThisObjectFly : MonoBehaviour {
         if (isObjectFlying && planeVelocity < velocityBeforePlaneCanPitchRoll)
         {
             planeVelocity = minVelocity;
-            hasObjectStalled = true;
+            //hasObjectStalled = true;
         }
 
         //if (hasObjectStalled)
